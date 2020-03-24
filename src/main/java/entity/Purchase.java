@@ -23,4 +23,12 @@ public class Purchase {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public Long getGoodsId() {
+        return goodsId;
+    }
 }

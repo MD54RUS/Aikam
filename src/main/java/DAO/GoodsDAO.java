@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface GoodsDAO {
   List<Goods> getAll() throws SQLException;
+  Goods getGodsByName(String name) throws SQLException;
+  Goods getGoodsById(Long id) throws SQLException;
 }

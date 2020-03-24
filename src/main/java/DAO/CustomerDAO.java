@@ -7,8 +7,9 @@ import java.util.List;
 
 public interface CustomerDAO {
 
-    List<Customer> getCustomerBySurname(String surname) throws SQLException;
-    Customer getCustomerById(long id) throws SQLException;
-    List<Customer> getAll() throws SQLException;
+  List<Customer> getCustomerByLastName(String surname) throws SQLException;
 
+  Customer getCustomerById(long id) throws SQLException;
+
+  List<Customer> getAll() throws SQLException;
 }

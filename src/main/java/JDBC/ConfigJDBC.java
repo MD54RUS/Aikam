@@ -3,8 +3,6 @@ package JDBC;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public class ConfigJDBC {
   private static final String DB_DRIVER = "org.postgresql.Driver";
@@ -15,14 +13,12 @@ public class ConfigJDBC {
   public Connection getConnection() {
     Connection connection = null;
     try {
-
       Class.forName(DB_DRIVER);
       connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
       System.out.println("Connection created");
     } catch (ClassNotFoundException | SQLException ex) {
       System.out.println("Connection error");
-        ex.printStackTrace();
-
+      ex.printStackTrace();
     }
     return connection;
   }

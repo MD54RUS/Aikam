@@ -12,7 +12,7 @@ public class CustomerDAOImpl extends ConfigJDBC implements CustomerDAO {
   Connection connection = getConnection();
 
   @Override
-  public List<Customer> getCustomerBySurname(String surname) throws SQLException {
+  public List<Customer> getCustomerByLastName(String surname) throws SQLException {
     List<Customer> customerList = new ArrayList<>();
     String sql = "SELECT ID, NAME, SURNAME FROM CUSTOMER WHERE SURNAME=?";
     try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -23,7 +23,7 @@ public class CustomerDAOImpl extends ConfigJDBC implements CustomerDAO {
         Customer customer = new Customer();
         customer.setId(resultSet.getLong("ID"));
         customer.setName(resultSet.getString("NAME"));
-        customer.setSurname(resultSet.getString("SURNAME"));
+        customer.setLastName(resultSet.getString("SURNAME"));
         customerList.add(customer);
       }
 
@@ -48,7 +48,7 @@ public class CustomerDAOImpl extends ConfigJDBC implements CustomerDAO {
       if (resultSet.next()) {
         customer.setId(resultSet.getLong("ID"));
         customer.setName(resultSet.getString("NAME"));
-        customer.setSurname(resultSet.getString("SURNAME"));
+        customer.setLastName(resultSet.getString("SURNAME"));
       }
     }
 
@@ -66,7 +66,7 @@ public class CustomerDAOImpl extends ConfigJDBC implements CustomerDAO {
         Customer customer = new Customer();
         customer.setId(resultSet.getLong("ID"));
         customer.setName(resultSet.getString("NAME"));
-        customer.setSurname(resultSet.getString("SURNAME"));
+        customer.setLastName(resultSet.getString("SURNAME"));
         customerList.add(customer);
       }
 

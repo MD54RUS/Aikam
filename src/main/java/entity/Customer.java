@@ -2,18 +2,18 @@ package entity;
 
 public class Customer {
   private Long id;
-  private String Name;
-  private String Surname;
+  private String name;
+  private String lastName;
 
   public void setId(Long id) {
     this.id = id;
   }
 
   public void setName(String name) {
-    Name = name;
+    this.name = name;
   }
 
-  public void setSurname(String surname) {
-    Surname = surname;
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 }
