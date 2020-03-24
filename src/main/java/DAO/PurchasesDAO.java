@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PurchasesDAO {
 
-  List<Purchase> getPurchasesByGoods(Goods goods);
+  List<Purchase> getPurchasesByGoods(Goods goods) throws SQLException;
 
   List<Purchase> getPurchasesBetweenDate(Date date1, Date date2);
 

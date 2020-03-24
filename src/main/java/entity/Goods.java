@@ -20,4 +20,8 @@ public class Goods {
   public int getPrice() {
     return price;
   }
+
+  public Long getId() {
+    return id;
+  }
 }
