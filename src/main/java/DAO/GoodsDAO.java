@@ -1,9 +1,10 @@
 package DAO;
 
-import entity.Purchases;
+import entity.Goods;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface GoodsDAO {
-    List<Purchases> getAll();
+  List<Goods> getAll() throws SQLException;
 }

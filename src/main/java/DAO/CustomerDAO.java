@@ -2,12 +2,13 @@ package DAO;
 
 import entity.Customer;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface CustomerDAO {
 
-    List<Customer> getCustomerBySurname(String surname);
-    Customer getCustomerById(long id);
-    List<Customer> getAll();
+    List<Customer> getCustomerBySurname(String surname) throws SQLException;
+    Customer getCustomerById(long id) throws SQLException;
+    List<Customer> getAll() throws SQLException;
 
 }

@@ -1,13 +1,14 @@
 package DAO;
 
 import entity.Goods;
-import entity.Purchases;
+import entity.Purchase;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 public interface PurchasesDAO {
-    List<Purchases> getPurchasesByGoods(Goods goods);
-    List<Purchases> getPurchasesByDate(Date date);
-    List<Purchases> getAll();
+    List<Purchase> getPurchasesByGoods(Goods goods);
+    List<Purchase> getPurchasesBetweenDate(Date date1, Date date2);
+    List<Purchase> getAll() throws SQLException;
 }
