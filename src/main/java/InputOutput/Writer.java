@@ -1,9 +1,10 @@
 package InputOutput;
 
-import DTO.AnswerSearch;
+import DTO.Answer;
+import DTO.AnswerSearchDTO;
 
 import java.io.IOException;
 
 public interface Writer {
-    void write(AnswerSearch answer) throws IOException;
+    void write(Answer answer) throws IOException;
 }

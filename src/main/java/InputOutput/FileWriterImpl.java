@@ -1,6 +1,7 @@
 package InputOutput;
 
-import DTO.AnswerSearch;
+import DTO.Answer;
+import DTO.AnswerSearchDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -13,7 +14,7 @@ public class FileWriterImpl implements Writer {
     file = new File(filename);
   }
 
-  public void write(AnswerSearch answer) throws IOException {
+  public void write(Answer answer) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     mapper.writeValue(file, answer);
   }

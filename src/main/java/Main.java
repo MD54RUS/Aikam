@@ -1,18 +1,21 @@
-import InputOutput.FileReaderToStringImpl;
+import InputOutput.FileReaderImpl;
 import InputOutput.FileWriterImpl;
-import Service.MLString;
-import org.json.simple.parser.ParseException;
-
-import java.io.IOException;
+import Service.MainLogic;
 
 public class Main {
   public static void main(String[] args) {
-    try {
-      MLString schema =
-              new MLString(new FileReaderToStringImpl("input.json"), new FileWriterImpl("output.json"));
-      schema.execute();
-    } catch (IOException | ParseException e) {
-      e.printStackTrace();
+    MainLogic schema =
+            new MainLogic(new FileReaderImpl(args[1]), new FileWriterImpl(args[2]));
+
+    switch (args[0]) {
+      case "search":
+        schema.execute();
+        break;
+      case "stat":
+        schema.executeStat();
+        break;
+      default:
+        throw new RuntimeException("Не правильно заданы аргументы коммандной строки");
     }
     //    try {
     //      CommandExecutor executor = new PassiveCustomers(1);

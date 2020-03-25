@@ -5,11 +5,11 @@ import org.json.simple.JSONObject;
 
 import java.util.List;
 
-public class ResultStringDTO {
+public class CriteriaResult {
     private JSONObject criteria;
     private List<Customer> results;
 
-    public ResultStringDTO(JSONObject criteria, List<Customer> results) {
+    public CriteriaResult(JSONObject criteria, List<Customer> results) {
         this.criteria = criteria;
         this.results = results;
     }
