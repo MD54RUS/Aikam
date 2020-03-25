@@ -1,6 +1,5 @@
 package DTO;
 
-import entity.Criteria;
 import entity.Customer;
 import org.json.simple.JSONObject;
 

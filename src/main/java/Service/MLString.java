@@ -2,8 +2,8 @@ package Service;
 
 import DTO.AnswerSearch;
 import DTO.ResultStringDTO;
-import InutOutput.FileReaderToStringImpl;
-import InutOutput.Writer;
+import InputOutput.Reader;
+import InputOutput.Writer;
 import commands.CommandExecutor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -13,13 +13,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class MLString {
-  private DAOService daoService;
-  private FileReaderToStringImpl reader;
+  private Reader reader;
   private Writer writer;
   private AnswerSearch answer;
 
-  public MLString(DAOService daoService, FileReaderToStringImpl reader, Writer writer) {
-    this.daoService = daoService;
+  public MLString(Reader reader, Writer writer) {
     this.reader = reader;
     this.writer = writer;
     answer = new AnswerSearch();
@@ -39,8 +37,6 @@ public class MLString {
                 }
               });
     }
-    System.out.println("Answer");
-    System.out.println(answer);
     writer.write(answer);
   }
 }
