@@ -4,10 +4,10 @@ public class Criteria {
 
     private String lastName;
     private String productName;
-    private int minTimes;
-    private int minExpenses;
-    private int maxExpenses;
-    private int badCustomers;
+    private Integer minTimes;
+    private Integer minExpenses;
+    private Integer maxExpenses;
+    private Integer badCustomers;
 
     public String getLastName() {
         return lastName;

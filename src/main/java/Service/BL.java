@@ -23,18 +23,19 @@ public class BL {
     answer = new AnswerSearch();
   }
 
-  public void execute() throws IOException {
-    List<Criteria> conditions = reader.get();
-    if (conditions != null) {
-      conditions.forEach(
-              criteria -> {
-                try {
-                  answer.addResult(new ResultsDTO(criteria, daoService.search(criteria)));
-                } catch (SQLException e) {
-                  e.printStackTrace();
-                }
-              });
-    }
-    writer.write(answer);
-  }
+//  public void execute() throws IOException {
+//    List<Criteria> conditions = reader.get();
+//    if (conditions != null) {
+//      conditions.forEach(
+//              criteria -> {
+//                try {
+//                  answer.addResult(new ResultsDTO(criteria, daoService.search(criteria)));
+//                } catch (SQLException e) {
+//                  e.printStackTrace();
+//                }
+//              });
+//    }
+//    System.out.println(answer);
+//    writer.write(answer);
+//  }
 }

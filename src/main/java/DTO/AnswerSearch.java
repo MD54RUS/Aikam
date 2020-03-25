@@ -5,13 +5,13 @@ import java.util.List;
 
 public class AnswerSearch {
     private String type = "search";
-    private List<ResultsDTO> results;
+    private List<ResultStringDTO> results;
 
     public AnswerSearch() {
         results = new ArrayList<>();
     }
 
-    public void addResult(ResultsDTO resultsDTO) {
+    public void addResult(ResultStringDTO resultsDTO) {
         results.add(resultsDTO);
     }
 
@@ -19,7 +19,7 @@ public class AnswerSearch {
         return type;
     }
 
-    public List<ResultsDTO> getResults() {
+    public List<ResultStringDTO> getResults() {
         return results;
     }
 }

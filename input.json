@@ -8,11 +8,11 @@
       "minTimes": 5
     },
     {
-      "minExpenses": 112,
-      "maxExpenses": 4000
+      "minExpenses": 20,
+      "maxExpenses": 50
     },
     {
-      "badCustomers": 3
+      "badCustomers": 1
     }
   ]
 }

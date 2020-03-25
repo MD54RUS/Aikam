@@ -26,13 +26,16 @@ public class DatabaseConnection {
         return connection;
     }
 
-    public static DatabaseConnection getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new DatabaseConnection();
-        } else if (instance.getConnection().isClosed()) {
-            instance = new DatabaseConnection();
+    public static DatabaseConnection getInstance() {
+        try {
+            if (instance == null) {
+                instance = new DatabaseConnection();
+            } else if (instance.getConnection().isClosed()) {
+                instance = new DatabaseConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
         return instance;
     }
 }
