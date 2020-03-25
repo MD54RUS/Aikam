@@ -11,7 +11,6 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +49,9 @@ public class MainLogic {
   }
 
   public void executeStat() {
-    Answer answer;
     try {
-      LocalDate start =
-              reader.getStat().getKey().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      LocalDate end =
-              reader.getStat().getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate start = reader.getStat().getKey();
+      LocalDate end = reader.getStat().getValue();
       Statistics stat = new Statistics(start, end);
       answer = new AnswerStatisticsDTO(start, end, stat.execute());
     } catch (ParseException | IOException | SQLException e) {

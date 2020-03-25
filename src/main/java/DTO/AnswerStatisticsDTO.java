@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AnswerStatisticsDTO extends Answer {
-  private String type;
   private int totalDays;
   private LocalDate startDay;
   private LocalDate endDay;
@@ -27,6 +26,14 @@ public class AnswerStatisticsDTO extends Answer {
     type = "stat";
     totalDays = daysBetween(startDay, endDay);
     this.customers = customers;
+  }
+
+  public int getTotalDays() {
+    return totalDays;
+  }
+
+  public List<CustomersDTO> getCustomers() {
+    return customers;
   }
 
   public void setCustomers(List<CustomersDTO> customers) {
@@ -83,6 +90,14 @@ public class AnswerStatisticsDTO extends Answer {
     public void addPurchases(GoodsDTO purchases) {
       this.purchases.add(purchases);
     }
+
+    public String getName() {
+      return name;
+    }
+
+    public List<GoodsDTO> getPurchases() {
+      return purchases;
+    }
   }
 
   public static class GoodsDTO {
@@ -92,6 +107,14 @@ public class AnswerStatisticsDTO extends Answer {
     public GoodsDTO(String name, int expenses) {
       this.name = name;
       this.expenses = expenses;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public int getExpenses() {
+      return expenses;
     }
   }
 }

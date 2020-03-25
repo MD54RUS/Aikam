@@ -1,44 +1,26 @@
 {
-  "type": "search",
-  "results": [
+  "type": "stat",
+  "totalDays": 5234,
+  "customers": [
     {
-      "criteria": {
-        "lastName": "Иванов"
-      },
-      "results": [
+      "name": "Иванов Иван",
+      "purchases": [
         {
-          "name": "Иван",
-          "lastName": "Иванов"
+          "name": "apple",
+          "expenses": 24
+        },
+        {
+          "name": "milk",
+          "expenses": 45
         }
       ]
     },
     {
-      "criteria": {
-        "minTimes": 5,
-        "productName": "Минеральная вода"
-      },
-      "results": []
-    },
-    {
-      "criteria": {
-        "minExpenses": 20,
-        "maxExpenses": 50
-      },
-      "results": [
+      "name": "Сидоров Сидор",
+      "purchases": [
         {
-          "name": "Иван",
-          "lastName": "Иванов"
-        }
-      ]
-    },
-    {
-      "criteria": {
-        "badCustomers": 1
-      },
-      "results": [
-        {
-          "name": "Петр",
-          "lastName": "Петров"
+          "name": "apple",
+          "expenses": 12
         }
       ]
     }

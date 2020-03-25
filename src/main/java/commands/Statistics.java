@@ -8,40 +8,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.time.ZoneId;
+import java.util.*;
 
 public class Statistics {
 
-  private LocalDate startDate;
-  private LocalDate endDate;
+  private java.sql.Date startDate;
+  private java.sql.Date endDate;
   private PreparedStatement statement;
   private Connection connection;
   private List<AnswerStatisticsDTO.CustomersDTO> result;
 
   private final String SQL_QUERY_CUSTOMERS =
-          "SELECT p.\"CUSTOMER_ID\", CONCAT (c.\"LASTNAME\" ,' ',c.\"NAME\") As FullName "
-                  + "FROM \"PURCHASES\" as p"
-                  + "join \"CUSTOMER\" as c on p.\"CUSTOMER_ID\" = c.\"ID\""
+          "SELECT \"PURCHASES\".\"CUSTOMER_ID\", CONCAT (\"CUSTOMER\".\"LASTNAME\" ,' ',\"CUSTOMER\".\"NAME\") As \"FullName\" "
+                  + "FROM \"PURCHASES\" "
+                  + "join \"CUSTOMER\" on \"PURCHASES\".\"CUSTOMER_ID\" = \"CUSTOMER\".\"ID\""
                   + "where \"DATE\" between ? and ? and EXTRACT(dow FROM \"DATE\") not in (6,0)"
-                  + "GROUP BY \"CUSTOMER_ID\",FullName";
+                  + "GROUP BY \"CUSTOMER_ID\", \"FullName\"";
+  //  "SELECT p.\"CUSTOMER_ID\", CONCAT (c.\"LASTNAME\" ,' ',c.\"NAME\") As FullName "
+  //          + "FROM \"PURCHASES\" as p"
+  //          + "join \"CUSTOMER\" as c on p.\"CUSTOMER_ID\" = c.\"ID\""
+  //          + "where \"DATE\" between ? and ? and EXTRACT(dow FROM \"DATE\") not in (6,0)"
+  //          + "GROUP BY \"CUSTOMER_ID\", FullName";
   private final String SQL_QUERY_PURCHASES =
-          "SELECT b.\"NAME\", COUNT(DISTINCT p)*b.\"PRICE\" as \"total\""
-                  + "from \"GOODS\" as b"
-                  + "join \"PURCHASES\" as p on p.\"GOODS_ID\" = b.\"ID\""
-                  + " where p.\"CUSTOMER_ID\" = ? and p.\"DATE\" between ? and ? "
-                  + "and EXTRACT(dow FROM p.\"DATE\") not in (6,0) "
-                  + " group by b.\"NAME\",b.\"PRICE\"";
+          "SELECT \"GOODS\".\"NAME\", COUNT(DISTINCT \"PURCHASES\")*\"GOODS\".\"PRICE\" as \"total\"\n"
+                  + "                  from \"GOODS\"\n"
+                  + "                  join \"PURCHASES\" on \"PURCHASES\".\"GOODS_ID\" = \"GOODS\".\"ID\"\n"
+                  + "                  where \"PURCHASES\".\"CUSTOMER_ID\" = ? and \"PURCHASES\".\"DATE\" between ? and ? \n"
+                  + "                  and EXTRACT(dow FROM \"PURCHASES\".\"DATE\") not in (6,0) \n"
+                  + "                  group by \"GOODS\".\"NAME\",\"GOODS\".\"PRICE\"";
 
   public Statistics(LocalDate startDate, LocalDate endDate) throws SQLException {
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.startDate = java.sql.Date.valueOf(startDate.plusDays(1L));
+    this.endDate = java.sql.Date.valueOf(endDate.minusDays(1L));
     connection = DatabaseConnection.getInstance().getConnection();
     statement = connection.prepareStatement(SQL_QUERY_CUSTOMERS);
-    statement.setString(1, startDate.plusDays(1L).toString());
-    statement.setString(2, endDate.minusDays(1L).toString());
+    statement.setDate(1, this.startDate);
+    statement.setDate(2, this.endDate);
     result = new ArrayList<>();
   }
 
@@ -49,7 +52,7 @@ public class Statistics {
     ResultSet resultSet = statement.executeQuery();
     SortedMap<Long, String> customerList = new TreeMap<>();
     while (resultSet.next()) {
-      customerList.put(resultSet.getLong("ID"), resultSet.getString("FullName"));
+      customerList.put(resultSet.getLong("CUSTOMER_ID"), resultSet.getString("FullName"));
     }
     resultSet.close();
     List<AnswerStatisticsDTO.CustomersDTO> customersDTOList = new ArrayList<>();
@@ -57,8 +60,8 @@ public class Statistics {
     for (Long x : customerList.keySet()) {
       statement = connection.prepareStatement(SQL_QUERY_PURCHASES);
       statement.setLong(1, x);
-      statement.setString(2, startDate.plusDays(1L).toString());
-      statement.setString(3, endDate.minusDays(1L).toString());
+      statement.setDate(2, startDate);
+      statement.setDate(3, endDate);
       customerDTO = new AnswerStatisticsDTO.CustomersDTO(customerList.get(x));
       ResultSet resultSet1 = statement.executeQuery();
       while (resultSet1.next()) {
