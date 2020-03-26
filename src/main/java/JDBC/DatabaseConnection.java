@@ -1,41 +1,68 @@
 package JDBC;
 
+import InputOutput.SettingsParser;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static DatabaseConnection instance;
-    private Connection connection;
-    private static final String DB_DRIVER = "org.postgresql.Driver";
-    private static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/aikam";
-    private static final String DB_USERNAME = "reader";
-    private static final String DB_PASSWORD = "111";
+  private static DatabaseConnection instance;
+  private Connection connection;
+  private static final String DB_DRIVER = "org.postgresql.Driver";
 
-    private DatabaseConnection() throws SQLException {
-        try {
-            Class.forName(DB_DRIVER);
-            this.connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Database Connection Creation Failed : " + ex.getMessage());
-        }
+  private DatabaseConnection() throws SQLException {
+    try {
+      Class.forName(DB_DRIVER);
+      DBSettings settings = SettingsParser.getDBSettings();
+      this.connection =
+              DriverManager.getConnection(
+                      settings.getDbUrl(), settings.getDbUsername(), settings.getDbPassword());
+    } catch (ClassNotFoundException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public Connection getConnection() {
+    return connection;
+  }
+
+  public static DatabaseConnection getInstance() {
+    try {
+      if (instance == null) {
+        instance = new DatabaseConnection();
+      } else if (instance.getConnection().isClosed()) {
+        instance = new DatabaseConnection();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return instance;
+  }
+
+  public static class DBSettings {
+    private final String DB_URL;
+    private final String DB_USERNAME;
+    private final String DB_PASSWORD;
+
+    public DBSettings(String url, String usr, String pass) {
+      DB_URL = url;
+      DB_USERNAME = usr;
+      DB_PASSWORD = pass;
     }
 
-    public Connection getConnection() {
-        return connection;
+    public String getDbUrl() {
+      return DB_URL;
     }
 
-    public static DatabaseConnection getInstance() {
-        try {
-            if (instance == null) {
-                instance = new DatabaseConnection();
-            } else if (instance.getConnection().isClosed()) {
-                instance = new DatabaseConnection();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return instance;
+    public String getDbUsername() {
+      return DB_USERNAME;
     }
+
+    public String getDbPassword() {
+      return DB_PASSWORD;
+    }
+  }
 }

@@ -12,6 +12,7 @@ public class AnswerStatisticsDTO extends Answer {
   private LocalDate startDay;
   private LocalDate endDay;
   private List<CustomersDTO> customers;
+  private int totalCost;
 
   public AnswerStatisticsDTO(LocalDate startDay, LocalDate endDay) {
     this.startDay = startDay;
@@ -81,14 +82,17 @@ public class AnswerStatisticsDTO extends Answer {
   public static class CustomersDTO {
     String name;
     List<GoodsDTO> purchases;
+    int totalExpenses;
 
     public CustomersDTO(String name) {
       this.name = name;
       purchases = new LinkedList<>();
+      totalExpenses = 0;
     }
 
     public void addPurchases(GoodsDTO purchases) {
       this.purchases.add(purchases);
+      totalExpenses += purchases.expenses;
     }
 
     public String getName() {
@@ -97,6 +101,10 @@ public class AnswerStatisticsDTO extends Answer {
 
     public List<GoodsDTO> getPurchases() {
       return purchases;
+    }
+
+    public int getTotalExpenses() {
+      return totalExpenses;
     }
   }
 

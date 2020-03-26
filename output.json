@@ -13,7 +13,8 @@
           "name": "milk",
           "expenses": 45
         }
-      ]
+      ],
+      "totalExpenses": 69
     },
     {
       "name": "Сидоров Сидор",
@@ -22,7 +23,8 @@
           "name": "apple",
           "expenses": 12
         }
-      ]
+      ],
+      "totalExpenses": 12
     }
   ]
 }

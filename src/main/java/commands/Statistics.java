@@ -8,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Statistics {
 
@@ -65,7 +67,6 @@ public class Statistics {
       customerDTO = new AnswerStatisticsDTO.CustomersDTO(customerList.get(x));
       ResultSet resultSet1 = statement.executeQuery();
       while (resultSet1.next()) {
-
         AnswerStatisticsDTO.GoodsDTO purchase =
                 new AnswerStatisticsDTO.GoodsDTO(
                         resultSet1.getString("NAME"), resultSet1.getInt("total"));
