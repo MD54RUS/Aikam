@@ -1,6 +1,8 @@
 package JDBC;
 
 import InputOutput.SettingsParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,14 +16,20 @@ public class DatabaseConnection {
   private static final String DB_DRIVER = "org.postgresql.Driver";
 
   private DatabaseConnection() throws SQLException {
+    Logger logger = LoggerFactory.getLogger(DatabaseConnection.class);
     try {
       Class.forName(DB_DRIVER);
       DBSettings settings = SettingsParser.getDBSettings();
       this.connection =
               DriverManager.getConnection(
                       settings.getDbUrl(), settings.getDbUsername(), settings.getDbPassword());
-    } catch (ClassNotFoundException | IOException e) {
-      e.printStackTrace();
+      logger.info("Connection to DB established");
+    } catch (ClassNotFoundException e) {
+      logger.error("Driver not found", e);
+      throw new RuntimeException("Cant connect to the DB");
+    } catch (IOException e) {
+      logger.error("DB settings not found", e);
+      throw new RuntimeException("Cant connect to the DB");
     }
   }
 
@@ -29,19 +37,17 @@ public class DatabaseConnection {
     return connection;
   }
 
-  public static DatabaseConnection getInstance() {
-    try {
-      if (instance == null) {
-        instance = new DatabaseConnection();
-      } else if (instance.getConnection().isClosed()) {
-        instance = new DatabaseConnection();
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
+  public static DatabaseConnection getInstance() throws SQLException {
+
+    if (instance == null) {
+      instance = new DatabaseConnection();
+    } else if (instance.getConnection().isClosed()) {
+      instance = new DatabaseConnection();
     }
     return instance;
   }
 
+  //DTO для настроек коннекта к БД
   public static class DBSettings {
     private final String DB_URL;
     private final String DB_USERNAME;
@@ -53,15 +59,15 @@ public class DatabaseConnection {
       DB_PASSWORD = pass;
     }
 
-    public String getDbUrl() {
+    protected String getDbUrl() {
       return DB_URL;
     }
 
-    public String getDbUsername() {
+    protected String getDbUsername() {
       return DB_USERNAME;
     }
 
-    public String getDbPassword() {
+    protected String getDbPassword() {
       return DB_PASSWORD;
     }
   }

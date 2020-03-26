@@ -1,12 +1,20 @@
 import InputOutput.FileReaderImpl;
 import InputOutput.FileWriterImpl;
+import InputOutput.Reader;
+import InputOutput.Writer;
 import Service.MainLogic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class Main {
   public static void main(String[] args) {
-    MainLogic schema =
-            new MainLogic(new FileReaderImpl(args[1]), new FileWriterImpl(args[2]));
-
+    Logger logger = LoggerFactory.getLogger(Main.class);
+    Reader reader = new FileReaderImpl(args[1]);
+    Writer writer = new FileWriterImpl(args[2]);
+    MainLogic schema = new MainLogic(reader, writer);
+    logger.debug(Arrays.toString(args));
     switch (args[0]) {
       case "search":
         schema.execute();
@@ -15,16 +23,8 @@ public class Main {
         schema.executeStat();
         break;
       default:
+        logger.error("Invalid arguments = {}", Arrays.toString(args));
         throw new RuntimeException("Не правильно заданы аргументы коммандной строки");
     }
-    //    try {
-    //      CommandExecutor executor = new PassiveCustomers(1);
-    //      System.out.println(executor.execute());
-    //      executor = new CustomersByLastname("Сидоров");
-    //      System.out.println(executor.execute());
-    //    } catch (SQLException e) {
-    //      System.out.println("Executor died");
-    //      e.printStackTrace();
-    //    }
   }
 }

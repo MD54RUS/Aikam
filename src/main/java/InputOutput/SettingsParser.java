@@ -1,19 +1,36 @@
 package InputOutput;
 
 import JDBC.DatabaseConnection;
-import org.ini4j.Wini;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 public class SettingsParser {
   private static File file = new File("settings.ini");
 
   public static DatabaseConnection.DBSettings getDBSettings() throws IOException {
-    Wini ini = new Wini(file);
-    final String DB_URL = ini.get("DataBase settings", "DB_URL");
-    final String DB_USERNAME = ini.get("DataBase settings", "DB_USERNAME");
-    final String DB_PASSWORD = ini.get("DataBase settings", "DB_PASSWORD");
+    Logger logger = LoggerFactory.getLogger(SettingsParser.class);
+    Properties props = new Properties();
+    props.load(new FileInputStream(file));
+
+    final String DB_URL = props.getProperty("DB_URL");
+    final String DB_USERNAME = props.getProperty("DB_USERNAME");
+    final String DB_PASSWORD = props.getProperty("DB_PASSWORD");
+    logger.debug(
+            String.format(
+                    "DBSettings: DB_URL = \"%s\", DB_USERNAME = \"%s\", using password = %b",
+                    DB_URL, DB_USERNAME, (DB_PASSWORD != null && !DB_PASSWORD.equals(""))));
+    if (DB_URL == null || DB_USERNAME == null || DB_PASSWORD == null) {
+      logger.error(
+              String.format(
+                      "Cant connect to DB: DB_URL = \"%s\", DB_USERNAME = \"%s\", using password = %b",
+                      DB_URL, DB_USERNAME, (DB_PASSWORD != null && !DB_PASSWORD.equals(""))));
+      throw new RuntimeException("Настройки подключения к БД не найдены в файле settings.ini");
+    }
     return new DatabaseConnection.DBSettings(DB_URL, DB_USERNAME, DB_PASSWORD);
   }
 }

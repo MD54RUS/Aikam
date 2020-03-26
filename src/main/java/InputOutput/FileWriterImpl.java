@@ -1,8 +1,9 @@
 package InputOutput;
 
 import DTO.Answer;
-import DTO.AnswerSearchDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +15,14 @@ public class FileWriterImpl implements Writer {
     file = new File(filename);
   }
 
-  public void write(Answer answer) throws IOException {
+  public void write(Answer answer) {
     ObjectMapper mapper = new ObjectMapper();
-    mapper.writeValue(file, answer);
+    try {
+      mapper.writeValue(file, answer);
+    } catch (IOException e) {
+      Logger logger = LoggerFactory.getLogger(Writer.class);
+      logger.error("Cant save result", e);
+      throw new RuntimeException(String.format("Cant save result in file %s", file.getName()));
+    }
   }
 }

@@ -14,6 +14,9 @@ public abstract class CommandExecutor {
     Connection connection = DatabaseConnection.getInstance().getConnection();
     PreparedStatement statement;
 
+    protected CommandExecutor() throws SQLException {
+    }
+
     public List<Customer> execute() throws SQLException {
         ResultSet resultSet = this.statement.executeQuery();
         List<Customer> customerList = new ArrayList<>();

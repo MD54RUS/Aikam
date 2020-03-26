@@ -7,6 +7,8 @@ import commands.CommandExecutor;
 import commands.Statistics;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -15,11 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainLogic {
+  Logger logger;
   private Reader reader;
   private Writer writer;
   private Answer answer;
 
   public MainLogic(Reader reader, Writer writer) {
+    logger = LoggerFactory.getLogger(MainLogic.class);
     this.reader = reader;
     this.writer = writer;
   }
@@ -39,13 +43,9 @@ public class MainLogic {
       answer = new AnswerSearchDTO(results);
     } catch (ParseException | IOException | SQLException e) {
       answer = new AnswerErrorDTO(e.getMessage());
-      e.printStackTrace();
+      logger.error("Search execute", e);
     }
-    try {
-      writer.write(answer);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    writer.write(answer);
   }
 
   public void executeStat() {
@@ -56,12 +56,8 @@ public class MainLogic {
       answer = new AnswerStatisticsDTO(start, end, stat.execute());
     } catch (ParseException | IOException | SQLException e) {
       answer = new AnswerErrorDTO(e.getMessage());
-      e.printStackTrace();
+      logger.error("Statistics execute", e);
     }
-    try {
-      writer.write(answer);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    writer.write(answer);
   }
 }
