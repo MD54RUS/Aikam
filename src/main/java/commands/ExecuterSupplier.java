@@ -1,6 +1,5 @@
-package Service;
+package commands;
 
-import commands.*;
 import org.json.simple.JSONObject;
 
 import java.sql.SQLException;

@@ -1,30 +1,63 @@
 {
-  "type": "stat",
-  "totalDays": 5234,
-  "customers": [
+  "type": "search",
+  "results": [
     {
-      "name": "Иванов Иван",
-      "purchases": [
+      "criteria": {
+        "lastName": "Иванов"
+      },
+      "results": [
         {
-          "name": "apple",
-          "expenses": 24
-        },
-        {
-          "name": "milk",
-          "expenses": 45
+          "name": "Иван",
+          "lastName": "Иванов"
         }
-      ],
-      "totalExpenses": 69
+      ]
     },
     {
-      "name": "Сидоров Сидор",
-      "purchases": [
+      "criteria": {
+        "minTimes": 1,
+        "productName": "milk"
+      },
+      "results": [
         {
-          "name": "apple",
-          "expenses": 12
+          "name": "Иван",
+          "lastName": "Иванов"
+        },
+        {
+          "name": "Сидор",
+          "lastName": "Сидоров"
         }
-      ],
-      "totalExpenses": 12
+      ]
+    },
+    {
+      "criteria": {
+        "minExpenses": 0,
+        "maxExpenses": 100
+      },
+      "results": [
+        {
+          "name": "Сидор",
+          "lastName": "Сидоров"
+        },
+        {
+          "name": "Петр",
+          "lastName": "Петров"
+        },
+        {
+          "name": "Иван",
+          "lastName": "Иванов"
+        }
+      ]
+    },
+    {
+      "criteria": {
+        "badCustomers": 1
+      },
+      "results": [
+        {
+          "name": "Петр",
+          "lastName": "Петров"
+        }
+      ]
     }
   ]
 }

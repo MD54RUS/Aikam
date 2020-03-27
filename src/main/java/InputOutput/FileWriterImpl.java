@@ -22,7 +22,7 @@ public class FileWriterImpl implements Writer {
     } catch (IOException e) {
       Logger logger = LoggerFactory.getLogger(Writer.class);
       logger.error("Cant save result", e);
-      throw new RuntimeException(String.format("Cant save result in file %s", file.getName()));
+      System.out.println(String.format("Cant save result in file %s", file.getName()));
     }
   }
 }

@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface Reader {
     //Получение набора критериев для запросов
-    List<JSONObject> get() throws IOException, ParseException;
+    List<JSONObject> getCriteria() throws IOException, ParseException;
 
     //Получение пары дат для статистики
-    Pair<LocalDate, LocalDate> getStat() throws IOException, ParseException;
+    Pair<LocalDate, LocalDate> getDates() throws IOException, ParseException;
 }

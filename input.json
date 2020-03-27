@@ -4,12 +4,12 @@
       "lastName": "Иванов"
     },
     {
-      "productName": "Минеральная вода",
-      "minTimes": 5
+      "productName": "milk",
+      "minTimes": 1
     },
     {
-      "minExpenses": 20,
-      "maxExpenses": 50
+      "minExpenses": 0,
+      "maxExpenses": 100
     },
     {
       "badCustomers": 1

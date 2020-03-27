@@ -4,7 +4,9 @@ import DTO.*;
 import InputOutput.Reader;
 import InputOutput.Writer;
 import commands.CommandExecutor;
+import commands.ExecuterSupplier;
 import commands.Statistics;
+import javafx.util.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -30,33 +32,33 @@ public class MainLogic {
 
   public void execute() {
     try {
-      List<JSONObject> conditions = reader.get();
+      List<JSONObject> conditions = reader.getCriteria();
       List<CriteriaResult> results = new ArrayList<>();
-
       if (conditions != null) {
-        for (JSONObject criteria : conditions) {
-          CommandExecutor query = ExecuterSupplier.get(criteria);
+        for (JSONObject criterion : conditions) {
+          CommandExecutor query = ExecuterSupplier.get(criterion);
           assert query != null;
-          results.add(new CriteriaResult(criteria, query.execute()));
+          results.add(new CriteriaResult(criterion, query.execute()));
         }
       }
       answer = new AnswerSearchDTO(results);
     } catch (ParseException | IOException | SQLException e) {
+      logger.error("Search execute error: ", e);
       answer = new AnswerErrorDTO(e.getMessage());
-      logger.error("Search execute", e);
     }
     writer.write(answer);
   }
 
   public void executeStat() {
     try {
-      LocalDate start = reader.getStat().getKey();
-      LocalDate end = reader.getStat().getValue();
+      Pair<LocalDate, LocalDate> dates = reader.getDates();
+      LocalDate start = dates.getKey();
+      LocalDate end = dates.getValue();
       Statistics stat = new Statistics(start, end);
       answer = new AnswerStatisticsDTO(start, end, stat.execute());
-    } catch (ParseException | IOException | SQLException e) {
+    } catch (ParseException | IOException | SQLException | NullPointerException e) {
+      logger.error("Statistics execute error: ", e);
       answer = new AnswerErrorDTO(e.getMessage());
-      logger.error("Statistics execute", e);
     }
     writer.write(answer);
   }

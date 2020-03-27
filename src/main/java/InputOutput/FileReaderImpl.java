@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -22,15 +23,16 @@ public class FileReaderImpl implements Reader {
     this.filename = filename;
   }
 
-  public List<JSONObject> get() throws IOException, ParseException {
+  @Override
+  public List<JSONObject> getCriteria() throws IOException, ParseException {
     Object obj = parser.parse(new FileReader(filename));
     JSONObject jsonObject = (JSONObject) obj;
-    JSONArray criterias = (JSONArray) jsonObject.get("criterias");
-    return new ArrayList<JSONObject>(criterias);
+    JSONArray criteria = (JSONArray) jsonObject.get("criterias");
+    return new ArrayList<JSONObject>(criteria);
   }
 
   @Override
-  public Pair<LocalDate, LocalDate> getStat() throws IOException, ParseException {
+  public Pair<LocalDate, LocalDate> getDates() throws IOException, ParseException {
     JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(filename));
     LocalDate start = LocalDate.parse((String) jsonObject.get("startDate"));
     LocalDate end = LocalDate.parse((String) jsonObject.get("endDate"));

@@ -24,7 +24,7 @@ public class Main {
         break;
       default:
         logger.error("Invalid arguments = {}", Arrays.toString(args));
-        throw new RuntimeException("Не правильно заданы аргументы коммандной строки");
+        System.out.println("Не правильно заданы аргументы коммандной строки");
     }
   }
 }
