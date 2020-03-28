@@ -3,6 +3,8 @@ package commands;
 import org.json.simple.JSONObject;
 
 import java.sql.SQLException;
+
+//не складывать в общий класс с перегрузкой методов - убивает расширяемость.
 //Выбор SQL запроса в зависимости от требуемой операции.
 public class ExecuterSupplier {
   public static CommandExecutor get(JSONObject criteria) throws SQLException {

@@ -1,12 +1,12 @@
 package InputOutput;
 
-import javafx.util.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 public interface Reader {
@@ -14,5 +14,5 @@ public interface Reader {
     List<JSONObject> getCriteria() throws IOException, ParseException;
 
     //Получение пары дат для статистики
-    Pair<LocalDate, LocalDate> getDates() throws IOException, ParseException;
+    Map<String, LocalDate> getDates() throws IOException, ParseException;
 }

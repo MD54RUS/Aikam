@@ -1,4 +1,4 @@
-package JDBC;
+package DBconnector;
 
 import InputOutput.SettingsParser;
 import org.slf4j.Logger;
@@ -24,11 +24,8 @@ public class DatabaseConnection {
               DriverManager.getConnection(
                       settings.getDbUrl(), settings.getDbUsername(), settings.getDbPassword());
       logger.info("Connection to DB established");
-    } catch (ClassNotFoundException e) {
-      logger.error("Driver not found", e);
-      throw new RuntimeException("Cant connect to the DB");
-    } catch (IOException e) {
-      logger.error("DB settings not found", e);
+    } catch (ClassNotFoundException | IOException e) {
+      logger.error("Connection to db fail. ", e);
       throw new RuntimeException("Cant connect to the DB");
     }
   }

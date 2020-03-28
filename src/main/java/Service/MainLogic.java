@@ -6,7 +6,6 @@ import InputOutput.Writer;
 import commands.CommandExecutor;
 import commands.ExecuterSupplier;
 import commands.Statistics;
-import javafx.util.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -17,9 +16,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainLogic {
-  Logger logger;
+  private Logger logger;
   private Reader reader;
   private Writer writer;
   private Answer answer;
@@ -30,14 +30,14 @@ public class MainLogic {
     this.writer = writer;
   }
 
-  public void execute() {
+  //логика исполнения с ключем search
+  public void executeSearch() {
     try {
       List<JSONObject> conditions = reader.getCriteria();
       List<CriteriaResult> results = new ArrayList<>();
       if (conditions != null) {
         for (JSONObject criterion : conditions) {
           CommandExecutor query = ExecuterSupplier.get(criterion);
-          assert query != null;
           results.add(new CriteriaResult(criterion, query.execute()));
         }
       }
@@ -49,13 +49,13 @@ public class MainLogic {
     writer.write(answer);
   }
 
+  //логика исполнения с ключем stat
   public void executeStat() {
     try {
-      Pair<LocalDate, LocalDate> dates = reader.getDates();
-      LocalDate start = dates.getKey();
-      LocalDate end = dates.getValue();
-      Statistics stat = new Statistics(start, end);
-      answer = new AnswerStatisticsDTO(start, end, stat.execute());
+
+      Map<String, LocalDate> dates = reader.getDates();
+      Statistics stat = new Statistics(dates);
+      answer = new AnswerStatisticsDTO(dates, stat.execute());
     } catch (ParseException | IOException | SQLException | NullPointerException e) {
       logger.error("Statistics execute error: ", e);
       answer = new AnswerErrorDTO(e.getMessage());

@@ -1,6 +1,6 @@
 package InputOutput;
 
-import JDBC.DatabaseConnection;
+import DBconnector.DatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +23,11 @@ public class SettingsParser {
     logger.debug(
             String.format(
                     "DBSettings: DB_URL = \"%s\", DB_USERNAME = \"%s\", using password = %b",
-                    DB_URL, DB_USERNAME, (DB_PASSWORD != null && !DB_PASSWORD.equals(""))));
+                    DB_URL, DB_USERNAME, !DB_PASSWORD.equals("")));
     if (DB_URL == null || DB_USERNAME == null || DB_PASSWORD == null) {
-      logger.error(
-              String.format(
-                      "Cant connect to DB: DB_URL = \"%s\", DB_USERNAME = \"%s\", using password = %b",
-                      DB_URL, DB_USERNAME, (DB_PASSWORD != null && !DB_PASSWORD.equals(""))));
       throw new RuntimeException("Настройки подключения к БД не найдены в файле settings.ini");
     }
+
     return new DatabaseConnection.DBSettings(DB_URL, DB_USERNAME, DB_PASSWORD);
   }
 }

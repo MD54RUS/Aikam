@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class AnswerStatisticsDTO extends Answer {
   private int totalDays;
@@ -13,17 +14,17 @@ public class AnswerStatisticsDTO extends Answer {
   private LocalDate endDay;
   private List<CustomersDTO> customers;
   private int totalCost;
+  //
+  //  public AnswerStatisticsDTO(Pair<LocalDate, LocalDate> dates) {
+  //    this.startDay = dates.getKey().plusDays(1L);
+  //    this.endDay = dates.getValue().minusDays(1L);
+  //    type = "stat";
+  //    totalDays = daysBetween(startDay, endDay);
+  //  }
 
-  public AnswerStatisticsDTO(LocalDate startDay, LocalDate endDay) {
-    this.startDay = startDay;
-    this.endDay = endDay;
-    type = "stat";
-    totalDays = daysBetween(startDay, endDay);
-  }
-
-  public AnswerStatisticsDTO(LocalDate startDay, LocalDate endDay, List<CustomersDTO> customers) {
-    this.startDay = startDay;
-    this.endDay = endDay;
+  public AnswerStatisticsDTO(Map<String, LocalDate> dates, List<CustomersDTO> customers) {
+    this.startDay = dates.get("start").plusDays(1L);
+    this.endDay = dates.get("end").minusDays(1L);
     type = "stat";
     totalDays = daysBetween(startDay, endDay);
     this.customers = customers;

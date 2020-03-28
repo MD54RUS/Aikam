@@ -1,6 +1,6 @@
 package commands;
 
-import JDBC.DatabaseConnection;
+import DBconnector.DatabaseConnection;
 import entity.Customer;
 
 import java.sql.Connection;
@@ -18,7 +18,7 @@ public abstract class CommandExecutor {
     }
 
     public List<Customer> execute() throws SQLException {
-        ResultSet resultSet = this.statement.executeQuery();
+        ResultSet resultSet = statement.executeQuery();
         List<Customer> customerList = new ArrayList<>();
         while (resultSet.next()) {
             Customer customer = new Customer();
@@ -26,6 +26,7 @@ public abstract class CommandExecutor {
             customer.setLastName(resultSet.getString("LASTNAME"));
             customerList.add(customer);
         }
+        resultSet.close();
         return customerList;
     }
 }

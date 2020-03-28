@@ -1,36 +1,54 @@
 package entity;
 
+import java.util.Objects;
+
 public class Customer {
-  private Long id;
-  private String name;
-  private String lastName;
+    private String name;
+    private String lastName;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Customer() {
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public Customer(String name, String lastName) {
+        this.name = name;
+        this.lastName = lastName;
+    }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-  public String getLastName() {
-    return lastName;
-  }
+    public String getName() {
+        return name;
+    }
 
-  @Override
-  public String toString() {
-    return "Customer{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", lastName='" + lastName + '\'' +
-            '}';
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return name.equals(customer.name) &&
+                lastName.equals(customer.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, lastName);
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

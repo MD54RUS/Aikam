@@ -1,25 +1,16 @@
 package commands;
 
+import DBconnector.DatabaseConnection;
 import DTO.AnswerStatisticsDTO;
-import JDBC.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Statistics {
-
-  private java.sql.Date startDate;
-  private java.sql.Date endDate;
-  private PreparedStatement statement;
-  private Connection connection;
-  private List<AnswerStatisticsDTO.CustomersDTO> result;
 
   private final String SQL_QUERY_CUSTOMERS =
           "SELECT \"PURCHASES\".\"CUSTOMER_ID\", CONCAT (\"CUSTOMER\".\"LASTNAME\" ,' ',\"CUSTOMER\".\"NAME\") As \"FullName\" "
@@ -27,11 +18,6 @@ public class Statistics {
                   + "join \"CUSTOMER\" on \"PURCHASES\".\"CUSTOMER_ID\" = \"CUSTOMER\".\"ID\""
                   + "where \"DATE\" between ? and ? and EXTRACT(dow FROM \"DATE\") not in (6,0)"
                   + "GROUP BY \"CUSTOMER_ID\", \"FullName\"";
-  //  "SELECT p.\"CUSTOMER_ID\", CONCAT (c.\"LASTNAME\" ,' ',c.\"NAME\") As FullName "
-  //          + "FROM \"PURCHASES\" as p"
-  //          + "join \"CUSTOMER\" as c on p.\"CUSTOMER_ID\" = c.\"ID\""
-  //          + "where \"DATE\" between ? and ? and EXTRACT(dow FROM \"DATE\") not in (6,0)"
-  //          + "GROUP BY \"CUSTOMER_ID\", FullName";
   private final String SQL_QUERY_PURCHASES =
           "SELECT \"GOODS\".\"NAME\", COUNT(DISTINCT \"PURCHASES\")*\"GOODS\".\"PRICE\" as \"total\"\n"
                   + "                  from \"GOODS\"\n"
@@ -39,10 +25,16 @@ public class Statistics {
                   + "                  where \"PURCHASES\".\"CUSTOMER_ID\" = ? and \"PURCHASES\".\"DATE\" between ? and ? \n"
                   + "                  and EXTRACT(dow FROM \"PURCHASES\".\"DATE\") not in (6,0) \n"
                   + "                  group by \"GOODS\".\"NAME\",\"GOODS\".\"PRICE\"";
+  private java.sql.Date startDate;
+  private java.sql.Date endDate;
+  private PreparedStatement statement;
+  private Connection connection;
+  private List<AnswerStatisticsDTO.CustomersDTO> result;
 
-  public Statistics(LocalDate startDate, LocalDate endDate) throws SQLException {
-    this.startDate = java.sql.Date.valueOf(startDate.plusDays(1L));
-    this.endDate = java.sql.Date.valueOf(endDate.minusDays(1L));
+  public Statistics(Map<String, LocalDate> dates) throws SQLException {
+
+    this.startDate = java.sql.Date.valueOf(dates.get("start").plusDays(1L));
+    this.endDate = java.sql.Date.valueOf(dates.get("end").minusDays(1L));
     connection = DatabaseConnection.getInstance().getConnection();
     statement = connection.prepareStatement(SQL_QUERY_CUSTOMERS);
     statement.setDate(1, this.startDate);
@@ -59,8 +51,9 @@ public class Statistics {
     resultSet.close();
     List<AnswerStatisticsDTO.CustomersDTO> customersDTOList = new ArrayList<>();
     AnswerStatisticsDTO.CustomersDTO customerDTO;
+
     for (Long x : customerList.keySet()) {
-      statement = connection.prepareStatement(SQL_QUERY_PURCHASES);
+      statement = connection.prepareStatement(SQL_QUERY_PURCHASES); // new statement ?
       statement.setLong(1, x);
       statement.setDate(2, startDate);
       statement.setDate(3, endDate);
