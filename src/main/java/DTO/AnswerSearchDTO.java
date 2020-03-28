@@ -3,17 +3,17 @@ package DTO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswerSearchDTO extends Answer {
-  private String type = "search";
-  private List<CriteriaResult> results;
+public class AnswerSearchDTO extends AnswerTemplate {
+    private String type = "search";
+    private List<CriteriaResult> results;
 
-  public AnswerSearchDTO() {
-    results = new ArrayList<>();
-  }
+    public AnswerSearchDTO() {
+        results = new ArrayList<>();
+    }
 
-  public AnswerSearchDTO(List<CriteriaResult> results) {
-    this.results = results;
-  }
+    public AnswerSearchDTO(List<CriteriaResult> results) {
+        this.results = results;
+    }
 
   public void addResult(CriteriaResult resultsDTO) {
     results.add(resultsDTO);

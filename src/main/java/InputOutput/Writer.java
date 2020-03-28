@@ -1,8 +1,7 @@
 package InputOutput;
 
-import DTO.Answer;
-
+import DTO.AnswerTemplate;
 
 public interface Writer {
-  void write(Answer answer);
+    void write(AnswerTemplate answer);
 }

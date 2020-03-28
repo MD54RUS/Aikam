@@ -14,16 +14,12 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -31,8 +27,7 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return name.equals(customer.name) &&
-                lastName.equals(customer.lastName);
+        return name.equals(customer.name) && lastName.equals(customer.lastName);
     }
 
     @Override
@@ -44,11 +39,12 @@ public class Customer {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
-        return "Customer{" +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return "Customer{" + ", name='" + name + '\'' + ", lastName='" + lastName + '\'' + '}';
     }
 }

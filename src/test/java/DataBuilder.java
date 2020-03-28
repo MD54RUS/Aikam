@@ -1,4 +1,4 @@
-import DTO.Answer;
+import DTO.AnswerTemplate;
 import InputOutput.Reader;
 import InputOutput.Writer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -83,15 +83,15 @@ public class DataBuilder {
 class TestWriter implements Writer {
   private String result = "";
 
-  @Override
-  public void write(Answer answer) {
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      result = mapper.writeValueAsString(answer);
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
+    @Override
+    public void write(AnswerTemplate answer) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            result = mapper.writeValueAsString(answer);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
-  }
 
   public String getResult() {
     return result;

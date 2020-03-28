@@ -1,5 +1,7 @@
 package DTO;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -8,52 +10,50 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class AnswerStatisticsDTO extends Answer {
-  private int totalDays;
-  private LocalDate startDay;
-  private LocalDate endDay;
-  private List<CustomersDTO> customers;
-  private int totalCost;
-  //
-  //  public AnswerStatisticsDTO(Pair<LocalDate, LocalDate> dates) {
-  //    this.startDay = dates.getKey().plusDays(1L);
-  //    this.endDay = dates.getValue().minusDays(1L);
-  //    type = "stat";
-  //    totalDays = daysBetween(startDay, endDay);
-  //  }
+public class AnswerStatisticsDTO extends AnswerTemplate {
+    private int totalDays;
+    private List<CustomersDTO> customers;
+    private BigDecimal totalExpenses;
+    private BigDecimal avgExpenses;
 
-  public AnswerStatisticsDTO(Map<String, LocalDate> dates, List<CustomersDTO> customers) {
-    this.startDay = dates.get("start").plusDays(1L);
-    this.endDay = dates.get("end").minusDays(1L);
-    type = "stat";
-    totalDays = daysBetween(startDay, endDay);
-    this.customers = customers;
-  }
+    public AnswerStatisticsDTO(Map<String, LocalDate> dates, List<CustomersDTO> customers) {
+        totalExpenses = new BigDecimal(0);
+        LocalDate startDay = dates.get("start");
+        LocalDate endDay = dates.get("end");
+        type = "stat";
+        totalDays = daysBetween(startDay, endDay);
+        this.customers = customers;
+        for (CustomersDTO customer : customers) {
+            totalExpenses = totalExpenses.add(BigDecimal.valueOf(customer.totalExpenses));
+        }
+        avgExpenses =
+                totalExpenses.divide(BigDecimal.valueOf(customers.size()), 2, RoundingMode.HALF_UP);
+    }
 
-  public int getTotalDays() {
-    return totalDays;
-  }
+    public int getTotalDays() {
+        return totalDays;
+    }
 
-  public List<CustomersDTO> getCustomers() {
-    return customers;
-  }
+    public List<CustomersDTO> getCustomers() {
+        return customers;
+    }
 
-  public void setCustomers(List<CustomersDTO> customers) {
-    this.customers = customers;
-  }
+    public BigDecimal getTotalExpenses() {
+        return totalExpenses;
+    }
 
-  public void addCustomer(CustomersDTO customer) {
-    customers.add(customer);
-  }
+    public BigDecimal getAvgExpenses() {
+        return avgExpenses;
+    }
 
-  private int daysBetween(final LocalDate start, final LocalDate end) {
-    int days = (int) ChronoUnit.DAYS.between(start, end);
-    List<DayOfWeek> ignore = new ArrayList<>();
-    ignore.add(DayOfWeek.SATURDAY);
-    ignore.add(DayOfWeek.SUNDAY);
+    private int daysBetween(final LocalDate start, final LocalDate end) {
+        int days = (int) ChronoUnit.DAYS.between(start, end);
+        List<DayOfWeek> ignore = new ArrayList<>();
+        ignore.add(DayOfWeek.SATURDAY);
+        ignore.add(DayOfWeek.SUNDAY);
 
-    if (days == 0) {
-      return 0;
+        if (days == 0) {
+            return 0;
     }
 
     if (!ignore.isEmpty()) {
@@ -125,5 +125,7 @@ public class AnswerStatisticsDTO extends Answer {
     public int getExpenses() {
       return expenses;
     }
+
+
   }
 }
