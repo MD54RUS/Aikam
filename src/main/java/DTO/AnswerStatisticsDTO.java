@@ -54,25 +54,25 @@ public class AnswerStatisticsDTO extends AnswerTemplate {
 
         if (days == 0) {
             return 0;
-    }
-
-    if (!ignore.isEmpty()) {
-      int startDay = start.getDayOfWeek().getValue();
-      int endDay = end.getDayOfWeek().getValue();
-      int diff = days / 7 * ignore.size();
-
-      for (DayOfWeek day : ignore) {
-        int currDay = day.getValue();
-        if (startDay <= currDay) {
-          diff++;
         }
-        if (endDay > currDay) {
-          diff++;
-        }
-      }
-      if (endDay > startDay) {
-        diff -= endDay - startDay;
-      }
+
+        if (!ignore.isEmpty()) {
+            int startDay = start.getDayOfWeek().getValue();
+            int endDay = end.getDayOfWeek().getValue();
+            int diff = days / 7 * ignore.size();
+
+            for (DayOfWeek day : ignore) {
+                int currDay = day.getValue();
+                if (startDay <= currDay) {
+                    diff++;
+                }
+                if (endDay > currDay) {
+                    diff++;
+                }
+            }
+            if (endDay > startDay) {
+                diff -= endDay - startDay;
+            }
 
       return days - diff;
     }
@@ -125,7 +125,5 @@ public class AnswerStatisticsDTO extends AnswerTemplate {
     public int getExpenses() {
       return expenses;
     }
-
-
   }
 }

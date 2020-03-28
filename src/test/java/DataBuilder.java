@@ -2,24 +2,18 @@ import DTO.AnswerTemplate;
 import InputOutput.Reader;
 import InputOutput.Writer;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DataBuilder {
-  private static final String DB_DRIVER = "org.postgresql.Driver";
   static final String initCustomerTable =
           "CREATE TABLE \"CUSTOMER\"\n"
                   + "("
@@ -65,6 +59,7 @@ public class DataBuilder {
                   + "('5','3','2','2002-02-02'),"
                   + "('6','3','1','2001-01-01'),"
                   + "('7','1','2','2001-01-01');";
+  private static final String DB_DRIVER = "org.postgresql.Driver";
 
   static Connection exe(String jdbcUrl) throws SQLException, ClassNotFoundException {
     Class.forName(DB_DRIVER);
@@ -83,15 +78,15 @@ public class DataBuilder {
 class TestWriter implements Writer {
   private String result = "";
 
-    @Override
-    public void write(AnswerTemplate answer) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            result = mapper.writeValueAsString(answer);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+  @Override
+  public void write(AnswerTemplate answer) {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      result = mapper.writeValueAsString(answer);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
     }
+  }
 
   public String getResult() {
     return result;
@@ -99,25 +94,22 @@ class TestWriter implements Writer {
 }
 
 class TestReader implements Reader {
-  JSONParser parser = new JSONParser();
-  private String criteria =
-          "{\"criterias\":[{\"lastName\":\"Иванов\"},{\"minTimes\":1,\"productName\":\"milk\"},{\"minExpenses\":0,\"maxExpenses\":100},{\"badCustomers\":1}]}";
-  private String date = "{\"endDate\":\"2020-01-26\",\"startDate\":\"2000-01-01\"}";
+  private ObjectMapper mapper = new ObjectMapper();
 
   @Override
-  public List<JSONObject> getCriteria() throws ParseException {
-    Object obj = parser.parse(criteria);
-    JSONObject jsonObject = (JSONObject) obj;
-    JSONArray criteria = (JSONArray) jsonObject.get("criterias");
-    return new ArrayList<JSONObject>(criteria);
+  public JsonNode getCriteria() throws JsonProcessingException {
+    String criteria =
+            "{\"criterias\":[{\"lastName\":\"Иванов\"},{\"minTimes\":1,\"productName\":\"milk\"},{\"minExpenses\":0,\"maxExpenses\":100},{\"badCustomers\":1}]}";
+    return mapper.readTree(criteria).get("criterias");
   }
 
   @Override
-  public Map<String, LocalDate> getDates() throws ParseException {
-    JSONObject jsonObject = (JSONObject) parser.parse(date);
-    Map<String, LocalDate> res = new HashMap<>();
-    res.put("start", LocalDate.parse((String) jsonObject.get("startDate")));
-    res.put("end", LocalDate.parse((String) jsonObject.get("endDate")));
-    return res;
+  public Map<String, LocalDate> getDates() throws JsonProcessingException {
+    String date = "{\"endDate\":\"2020-01-26\",\"startDate\":\"2000-01-01\"}";
+    JsonNode res = mapper.readTree(date);
+    Map<String, LocalDate> dates = new HashMap<>();
+    dates.put("start", LocalDate.parse(res.get("startDate").asText()));
+    dates.put("end", LocalDate.parse(res.get("endDate").asText()));
+    return dates;
   }
 }

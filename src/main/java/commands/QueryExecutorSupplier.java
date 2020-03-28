@@ -1,30 +1,30 @@
 package commands;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.sql.SQLException;
 
 /**
  * Выбор SQL запроса в зависимости от требуемой операции.
  */
-// не складывать в общий класс с перегрузкой методов - убивает расширяемость.
+// Перегрузка?
 
 public class QueryExecutorSupplier {
-    public static SqlCommandExecutor get(JSONObject criteria) throws SQLException {
-        if (criteria.get("lastName") != null) {
-            return new QueryCustomersByLastname((String) criteria.get("lastName"));
-        }
-        if (criteria.get("productName") != null) {
-            return new QueryCustomerByProduct(
-                    (String) criteria.get("productName"), (long) criteria.get("minTimes"));
-        }
-        if (criteria.get("minExpenses") != null) {
-            return new QueryCustomersByCostRange(
-                    (long) criteria.get("minExpenses"), (long) criteria.get("maxExpenses"));
-        }
-    if (criteria.get("badCustomers") != null) {
-      return new QueryPassiveCustomers((long) criteria.get("badCustomers"));
+  public static SqlCommandExecutor get(JsonNode criteria) throws SQLException {
+    if (criteria.get("lastName") != null) {
+      return new QueryCustomersByLastname(criteria.get("lastName").asText());
     }
-    return null;
+    if (criteria.get("productName") != null) {
+      return new QueryCustomerByProduct(
+              criteria.get("productName").asText(), criteria.get("minTimes").asLong());
+    }
+    if (criteria.get("minExpenses") != null) {
+      return new QueryCustomersByCostRange(
+              criteria.get("minExpenses").asLong(), criteria.get("maxExpenses").asLong());
+    }
+    if (criteria.get("badCustomers") != null) {
+      return new QueryPassiveCustomers(criteria.get("badCustomers").asLong());
+    }
+    throw new RuntimeException("Неправильно задан критерий для поиска.");
   }
 }

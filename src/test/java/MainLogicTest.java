@@ -4,7 +4,7 @@ import Service.MainLogic;
 import com.opentable.db.postgres.embedded.EmbeddedPostgres;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -19,18 +19,18 @@ import static org.mockito.Mockito.when;
 // Пишет в лог.
 
 public class MainLogicTest {
-  private EmbeddedPostgres pg;
-  private Connection connection;
-  private String resultSearch =
+  private static EmbeddedPostgres pg;
+  private static Connection connection;
+  private final String resultSearch =
           "{\"type\":\"search\",\"results\":[{\"criteria\":{\"lastName\":\"Иванов\"},\"results\":[{\"name\":\"Иван\",\"lastName\":\"Иванов\"}]},{\"criteria\":{\"minTimes\":1,\"productName\":\"milk\"},\"results\":[{\"name\":\"Сидор\",\"lastName\":\"Сидоров\"},{\"name\":\"Иван\",\"lastName\":\"Иванов\"}]},{\"criteria\":{\"minExpenses\":0,\"maxExpenses\":100},\"results\":[{\"name\":\"Иван\",\"lastName\":\"Иванов\"},{\"name\":\"Петр\",\"lastName\":\"Петров\"},{\"name\":\"Сидор\",\"lastName\":\"Сидоров\"}]},{\"criteria\":{\"badCustomers\":1},\"results\":[{\"name\":\"Петр\",\"lastName\":\"Петров\"}]}]}";
-    private String resultStat =
-            "{\"type\":\"stat\",\"totalDays\":5234,\"customers\":[{\"name\":\"Иванов Иван\",\"purchases\":[{\"name\":\"apple\",\"expenses\":24},{\"name\":\"milk\",\"expenses\":45}],\"totalExpenses\":69},{\"name\":\"Сидоров Сидор\",\"purchases\":[{\"name\":\"apple\",\"expenses\":12}],\"totalExpenses\":12}],\"totalExpenses\":81,\"avgExpenses\":40.50}";
+  private final String resultStat =
+          "{\"type\":\"stat\",\"totalDays\":5234,\"customers\":[{\"name\":\"Иванов Иван\",\"purchases\":[{\"name\":\"apple\",\"expenses\":24},{\"name\":\"milk\",\"expenses\":45}],\"totalExpenses\":69},{\"name\":\"Сидоров Сидор\",\"purchases\":[{\"name\":\"apple\",\"expenses\":12}],\"totalExpenses\":12}],\"totalExpenses\":81,\"avgExpenses\":40.50}";
 
   public MainLogicTest() {
   }
 
-  @Before
-  public void setUp() {
+  @BeforeClass
+  public static void setUp() {
     try {
       pg = EmbeddedPostgres.builder().start();
       String jdbcUrl = pg.getJdbcUrl("postgres", "postgres");
@@ -42,7 +42,7 @@ public class MainLogicTest {
     when(settings.getConnection()).thenReturn(connection);
   }
 
-  private void setMock(DatabaseConnection mock) {
+  private static void setMock(DatabaseConnection mock) {
     try {
       Field instance = DatabaseConnection.class.getDeclaredField("instance");
       instance.setAccessible(true);

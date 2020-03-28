@@ -1,20 +1,20 @@
 package DTO;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import entity.Customer;
-import org.json.simple.JSONObject;
 
 import java.util.List;
 
 public class CriteriaResult {
-    private JSONObject criteria;
+    private JsonNode criteria;
     private List<Customer> results;
 
-    public CriteriaResult(JSONObject criteria, List<Customer> results) {
+    public CriteriaResult(JsonNode criteria, List<Customer> results) {
         this.criteria = criteria;
         this.results = results;
     }
 
-    public JSONObject getCriteria() {
+    public JsonNode getCriteria() {
         return criteria;
     }
 

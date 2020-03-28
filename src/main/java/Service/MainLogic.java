@@ -3,11 +3,10 @@ package Service;
 import DTO.*;
 import InputOutput.Reader;
 import InputOutput.Writer;
+import com.fasterxml.jackson.databind.JsonNode;
 import commands.QueryExecutorStatistics;
 import commands.QueryExecutorSupplier;
 import commands.SqlCommandExecutor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,16 +32,17 @@ public class MainLogic {
   // логика исполнения с ключем search
   public void executeSearch() {
     try {
-      List<JSONObject> conditions = reader.getCriteria();
+      JsonNode conditions = reader.getCriteria();
       List<CriteriaResult> results = new ArrayList<>();
       if (conditions != null) {
-        for (JSONObject criterion : conditions) {
+        for (int i = 0; i < conditions.size(); i++) {
+          JsonNode criterion = conditions.get(i);
           SqlCommandExecutor query = QueryExecutorSupplier.get(criterion);
           results.add(new CriteriaResult(criterion, query.execute()));
         }
       }
       answer = new AnswerSearchDTO(results);
-    } catch (ParseException | IOException | SQLException e) {
+    } catch (IOException | SQLException e) {
       logger.error("Search execute error: ", e);
       answer = new AnswerErrorDTO(e.getMessage());
     }
@@ -52,11 +52,10 @@ public class MainLogic {
   // логика исполнения с ключем stat
   public void executeStat() {
     try {
-
       Map<String, LocalDate> dates = reader.getDates();
       QueryExecutorStatistics stat = new QueryExecutorStatistics(dates);
       answer = new AnswerStatisticsDTO(dates, stat.execute());
-    } catch (ParseException | IOException | SQLException | NullPointerException e) {
+    } catch (IOException | SQLException | NullPointerException e) {
       logger.error("Statistics execute error: ", e);
       answer = new AnswerErrorDTO(e.getMessage());
     }

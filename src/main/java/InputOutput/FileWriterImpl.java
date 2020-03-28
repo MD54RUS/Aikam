@@ -15,14 +15,14 @@ public class FileWriterImpl implements Writer {
     file = new File(filename);
   }
 
-    public void write(AnswerTemplate answer) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(file, answer);
-        } catch (IOException e) {
-            Logger logger = LoggerFactory.getLogger(Writer.class);
-            logger.error("Cant save result", e);
-            System.out.println(String.format("Cant save result in file %s", file.getName()));
-        }
+  public void write(AnswerTemplate answer) {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      mapper.writeValue(file, answer);
+    } catch (IOException e) {
+      Logger logger = LoggerFactory.getLogger(Writer.class);
+      logger.error("Cant save result", e);
+      System.out.println(String.format("Cant save result in file %s", file.getName()));
     }
+  }
 }
